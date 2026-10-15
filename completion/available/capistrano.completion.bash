@@ -22,8 +22,7 @@ _capcomplete() {
 				cap --all --tasks | cut -d " " -f 2 > .cap_tasks~
 			fi
 		fi
-		# shellcheck disable=SC2207
-		COMPREPLY=($(compgen -W "$(cat .cap_tasks~)" -- "${COMP_WORDS[COMP_CWORD]}"))
+		_bash-it-compgen -W "$(cat .cap_tasks~)" -- "${COMP_WORDS[COMP_CWORD]}"
 		return 0
 	fi
 }

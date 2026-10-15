@@ -1,5 +1,5 @@
 # shellcheck shell=bash
-# shellcheck disable=SC2034,SC2207
+# shellcheck disable=SC2034
 
 cite "about-completion"
 about-completion "maven - Java project build and dependency tool"
@@ -31,7 +31,7 @@ _mvn() {
 	# Work-around borrowed from the darcs work-around for the same
 	# issue.
 	colonprefixes=${cur%"${cur##*:}"}
-	COMPREPLY=($(compgen -W "$cmds" -- "$cur"))
+	_bash-it-compgen -W "$cmds" -- "$cur"
 	local i=${#COMPREPLY[*]}
 	while [ "$((--i))" -ge 0 ]; do
 		COMPREPLY[i]=${COMPREPLY[i]#"$colonprefixes"}

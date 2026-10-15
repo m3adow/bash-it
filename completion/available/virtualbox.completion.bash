@@ -1,5 +1,5 @@
 # shellcheck shell=bash
-# shellcheck disable=SC2120,SC2207
+# shellcheck disable=SC2120
 
 cite "about-completion"
 about-completion "virtualbox - Oracle VM VirtualBox virtualization software"
@@ -163,7 +163,7 @@ _vboxmanage() {
 	# In case current is complete command
 	case $cur in
 		startvm | list | controlvm)
-			COMPREPLY=($(compgen -W "${cur}"))
+			_bash-it-compgen -W "${cur}"
 			return 0
 			;;
 	esac
@@ -175,16 +175,16 @@ _vboxmanage() {
 
 		-l | --long)
 			opts=$(__vboxmanage_list "long")
-			COMPREPLY=($(compgen -W "${opts}" -- "${cur}"))
+			_bash-it-compgen -W "${opts}" -- "${cur}"
 			return 0
 			;;
 		startvm | list)
 			opts=$(__vboxmanage_"$prev")
-			COMPREPLY=($(compgen -W "${opts}" -- "${cur}"))
+			_bash-it-compgen -W "${opts}" -- "${cur}"
 			return 0
 			;;
 		--type)
-			COMPREPLY=($(compgen -W "gui headless" -- "${cur}"))
+			_bash-it-compgen -W "gui headless" -- "${cur}"
 			return 0
 			;;
 		gui | headless)
@@ -194,12 +194,12 @@ _vboxmanage() {
 		vboxmanage | -q | --nologo)
 			# echo "Got vboxmanage"
 			opts=$(__vboxmanage_default)
-			COMPREPLY=($(compgen -W "${opts}" -- "${cur}"))
+			_bash-it-compgen -W "${opts}" -- "${cur}"
 			return 0
 			;;
 		controlvm)
 			opts=$(__vboxmanage_list_vms)
-			COMPREPLY=($(compgen -W "${opts}" -- "${cur}"))
+			_bash-it-compgen -W "${opts}" -- "${cur}"
 			return 0
 			;;
 	esac
@@ -211,12 +211,12 @@ _vboxmanage() {
 			case $pprev in
 				startvm)
 					opts="--type"
-					COMPREPLY=($(compgen -W "${opts}" -- "${cur}"))
+					_bash-it-compgen -W "${opts}" -- "${cur}"
 					return 0
 					;;
 				controlvm)
 					opts=$(__vboxmanage_controlvm)
-					COMPREPLY=($(compgen -W "${opts}" -- "${cur}"))
+					_bash-it-compgen -W "${opts}" -- "${cur}"
 					return 0
 					;;
 			esac

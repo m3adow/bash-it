@@ -25,9 +25,7 @@ function _makecomplete() {
 	[[ "${#targets[@]}" -eq 0 ]] && return 0
 
 	# use the targets for completion
-	while IFS='' read -r line; do
-		COMPREPLY+=("$line")
-	done < <(compgen -W "$(tr ' ' '\n' <<< "${targets[@]}" | sort -u)" -- "${cur}")
+	_bash-it-compgen -W "$(tr ' ' '\n' <<< "${targets[@]}" | sort -u)" -- "${cur}"
 
 	return 0
 }

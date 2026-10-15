@@ -10,7 +10,7 @@
 _command_exists sqlmap || return
 
 function _sqlmap() {
-	local cur prev line
+	local cur prev
 
 	COMPREPLY=()
 	cur="$(_get_cword)"
@@ -20,7 +20,7 @@ function _sqlmap() {
 
 		# List directory content
 		--tamper)
-			while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W "${tamper:-}" -- "$cur")
+			_bash-it-compgen -W "${tamper:-}" -- "$cur"
 			return 0
 			;;
 		--output-dir | -t | -l | -m | -r | --load-cookies | --proxy-file | --sql-file | --shared-lib | --file-write)
@@ -32,35 +32,35 @@ function _sqlmap() {
 			return 0
 			;;
 		--method)
-			while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W 'GET POST PUT' -- "$cur")
+			_bash-it-compgen -W 'GET POST PUT' -- "$cur"
 			return 0
 			;;
 		--auth-type)
-			while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W 'Basic Digest NTLM PKI' -- "$cur")
+			_bash-it-compgen -W 'Basic Digest NTLM PKI' -- "$cur"
 			return 0
 			;;
 		--tor-type)
-			while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W 'HTTP SOCKS4 SOCKS5' -- "$cur")
+			_bash-it-compgen -W 'HTTP SOCKS4 SOCKS5' -- "$cur"
 			return 0
 			;;
 		-v)
-			while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W '1 2 3 4 5 6' -- "$cur")
+			_bash-it-compgen -W '1 2 3 4 5 6' -- "$cur"
 			return 0
 			;;
 		--dbms)
-			while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W 'mysql mssql access postgres' -- "$cur")
+			_bash-it-compgen -W 'mysql mssql access postgres' -- "$cur"
 			return 0
 			;;
 		--level | --crawl)
-			while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W '1 2 3 4 5' -- "$cur")
+			_bash-it-compgen -W '1 2 3 4 5' -- "$cur"
 			return 0
 			;;
 		--risk)
-			while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W '0 1 2 3' -- "$cur")
+			_bash-it-compgen -W '0 1 2 3' -- "$cur"
 			return 0
 			;;
 		--technique)
-			while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W 'B E U S T Q' -- "$cur")
+			_bash-it-compgen -W 'B E U S T Q' -- "$cur"
 			return 0
 			;;
 		-s)
@@ -68,7 +68,7 @@ function _sqlmap() {
 			return 0
 			;;
 		--dump-format)
-			while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(compgen -W 'CSV HTML SQLITE' -- "$cur")
+			_bash-it-compgen -W 'CSV HTML SQLITE' -- "$cur"
 			return 0
 			;;
 		-x)
@@ -78,9 +78,7 @@ function _sqlmap() {
 	esac
 
 	if [[ "$cur" == * ]]; then
-		COMPREPLY=()
-		while IFS='' read -r line; do COMPREPLY+=("$line"); done < <(
-			compgen -W '-h --help -hh --version -v -d -u --url -l -x -m -r -g -c --method \
+		_bash-it-compgen -W '-h --help -hh --version -v -d -u --url -l -x -m -r -g -c --method \
 			--data --param-del --cookie --cookie-del --load-cookies \
 			--drop-set-cookie --user-agent --random-agent --host --referer \
 			--headers --auth-type --auth-cred --auth-private --ignore-401 \
@@ -110,7 +108,6 @@ function _sqlmap() {
 			--dependencies --disable-coloring --gpage --identify-waf \
 			--mobile --page-rank --purge-output --smart \
 			--sqlmap-shell --wizard' -- "$cur"
-		)
 		# this removes any options from the list of completions that have
 		# already been specified somewhere on the command line, as long as
 		# these options can only be used once (in a word, "options", in

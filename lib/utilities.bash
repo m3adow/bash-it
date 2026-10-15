@@ -60,6 +60,12 @@ function _bash-it-array-dedup() {
 	printf '%s\n' "$@" | sort -u
 }
 
+# Replace array $1 with the non-empty lines of stdin.
+# Bash 3.2-safe: splits on newlines only, no globbing.
+function _bash-it-array-from-lines() {
+	IFS=$'\n' read -r -d '' -a "${1?}" || true
+}
+
 # Runs `grep` with *just* the provided arguments
 function _bash-it-grep() {
 	: "${BASH_IT_GREP:=$(type -P grep)}"

@@ -146,3 +146,33 @@ function local_setup_file() {
 	run _bash-it-array-contains-element xyz "${fruits[@]}"
 	assert_failure
 }
+
+@test "utilities: _bash-it-array-from-lines splits on newlines only" {
+	local -a result
+	_bash-it-array-from-lines result < <(printf '%s\n' 'foo bar' '  lead' 'back\slash')
+	assert_equal "${#result[@]}" 3
+	assert_equal "${result[0]}" 'foo bar'
+	assert_equal "${result[1]}" '  lead'
+	assert_equal "${result[2]}" 'back\slash'
+}
+
+@test "utilities: _bash-it-array-from-lines does not glob-expand" {
+	cd "${BATS_TEST_TMPDIR?}" && touch afile bfile
+	local -a result
+	_bash-it-array-from-lines result < <(printf '%s\n' '*')
+	assert_equal "${#result[@]}" 1
+	assert_equal "${result[0]}" '*'
+}
+
+@test "utilities: _bash-it-array-from-lines clears the array on empty input" {
+	local -a result=(stale entries)
+	_bash-it-array-from-lines result < /dev/null
+	assert_equal "${#result[@]}" 0
+}
+
+@test "utilities: _bash-it-array-from-lines drops empty lines" {
+	local -a result
+	_bash-it-array-from-lines result < <(printf 'a\n\n\nb\n')
+	assert_equal "${#result[@]}" 2
+	assert_equal "${result[1]}" 'b'
+}

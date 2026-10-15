@@ -15,6 +15,15 @@
 ##
 #
 
+function _bash-it-compgen() {
+	COMPREPLY=()
+	if ((BASH_VERSINFO[0] > 5 || (BASH_VERSINFO[0] == 5 && BASH_VERSINFO[1] >= 3))); then
+		compgen -V COMPREPLY "$@" || true
+	else
+		_bash-it-array-from-lines COMPREPLY < <(compgen "$@")
+	fi
+}
+
 #
 
 #

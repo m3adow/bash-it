@@ -56,7 +56,7 @@ function __powerline_last_status_prompt() {
 
 function __powerline_prompt_command() {
 	local last_status="$?" ## always the first
-	local beginning_of_line='\[\e[B\]'
+	printf '%*s\r' "$((${COLUMNS:-80} - 1))" ''
 	local move_cursor_rightmost='\e[500C'
 	local info prompt_color segment prompt
 
@@ -117,5 +117,5 @@ function __powerline_prompt_command() {
 		prompt+=" "
 	fi
 
-	PS1="${beginning_of_line}${normal?}${LEFT_PROMPT}${RIGHT_PROMPT}\n$(__powerline_last_status_prompt "${last_status}")${prompt}"
+	PS1="${normal?}${LEFT_PROMPT}${RIGHT_PROMPT}\n$(__powerline_last_status_prompt "${last_status}")${prompt}"
 }

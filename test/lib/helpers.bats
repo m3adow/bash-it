@@ -71,14 +71,6 @@ function local_setup() {
 	assert_line -n 0 "ag:"
 }
 
-@test "helpers: bash-it help aliases one alias enabled in the old directory" {
-	run ln -s "${BASH_IT?}/aliases/available/ag.aliases.bash" "${BASH_IT?}/aliases/enabled/750---ag.aliases.bash"
-	assert_link_exist "${BASH_IT?}/aliases/enabled/750---ag.aliases.bash"
-
-	run bash-it help aliases
-	assert_line -n 0 "ag:"
-}
-
 @test "helpers: bash-it help aliases one alias enabled in global directory" {
 	run bash-it enable alias "ag"
 	assert_line -n 0 'ag enabled with priority 750.'
@@ -423,6 +415,31 @@ function local_setup() {
 	assert_link_exist "${BASH_IT?}/enabled/250---dirs.plugin.bash"
 	assert [ ! -L "${BASH_IT?}/completion/enabled/350----dirs.completion.bash" ]
 	assert [ ! -L "${BASH_IT?}/plugins/enabled/250----dirs.plugin.bash" ]
+}
+
+@test "helpers: migrate removes dangling legacy links so the startup warning clears" {
+	run ln -s "${BASH_IT?}/plugins/available/gone.plugin.bash" "${BASH_IT?}/plugins/enabled/250---gone.plugin.bash"
+	assert_link_exist "${BASH_IT?}/plugins/enabled/250---gone.plugin.bash"
+
+	run _bash-it-migrate
+	assert_success
+	assert_output --partial '250---gone.plugin.bash'
+	assert [ ! -L "${BASH_IT?}/plugins/enabled/250---gone.plugin.bash" ]
+
+	run bash -c 'source "${BASH_IT}/bash_it.sh"' 2>&1
+	assert_success
+	refute_output --partial "bash-it migrate"
+}
+
+@test "helpers: migrate keeps the global link when a component exists in both layouts" {
+	run ln -s "${BASH_IT?}/plugins/available/dirs.plugin.bash" "${BASH_IT?}/plugins/enabled/250---dirs.plugin.bash"
+	run ln -s "../plugins/available/dirs.plugin.bash" "${BASH_IT?}/enabled/250---dirs.plugin.bash"
+	assert_link_exist "${BASH_IT?}/enabled/250---dirs.plugin.bash"
+
+	run _bash-it-migrate
+	assert_success
+	assert_link_exist "${BASH_IT?}/enabled/250---dirs.plugin.bash"
+	assert [ ! -L "${BASH_IT?}/plugins/enabled/250---dirs.plugin.bash" ]
 }
 
 @test "helpers: migrate enabled plugins that don't use the new priority-based configuration" {

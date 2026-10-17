@@ -1,19 +1,7 @@
 #!/usr/bin/env bash
 
-# Pull list of checkable files from clean_files.txt
-#  - Folder references are allowed
-#  - Empty lines are ignored
-#  - Comment lines (#) are ignored
+# Lint all files; vendor/ is excluded by .pre-commit-config.yaml.
 #
-# shellcheck disable=SC2002  # Prefer 'cat' for cleaner script
-FILES=()
-while IFS='' read -r line; do FILES+=("$line"); done < <(
-	cat clean_files.txt \
-		| grep -E -v '^\s*$' \
-		| grep -E -v '^\s*#' \
-		| xargs -I{} find "{}" -type f
-)
-
 # We clear the BASH_IT variable to help the shellcheck checker
 # identify source includes within our scripts that require a
 # 'source' directive.  For more information, see:
@@ -23,7 +11,7 @@ while IFS='' read -r line; do FILES+=("$line"); done < <(
 #
 
 if command -v prek > /dev/null 2>&1; then
-	BASH_IT='' prek run --files "${FILES[@]}"
+	BASH_IT='' prek run --all-files
 else
-	BASH_IT='' pre-commit run --files "${FILES[@]}"
+	BASH_IT='' pre-commit run --all-files
 fi

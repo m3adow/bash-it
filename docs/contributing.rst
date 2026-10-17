@@ -33,8 +33,7 @@ Code Style
 ----------
 
 
-* When adding new files, be sure to add them into `clean_files.txt`, which is a growing list of linted files in the project.
-* When changing existing files, consider also adding them into `clean_files.txt` and fixing the linting errors that arise. See :ref:`linting_your_changes` for more information.
+* Run ``./lint_clean_files.sh`` before opening a PR; it lints the whole repository (see :ref:`linting_your_changes`).
 * Indentation is using tabs, not spaces. Most of the code is indented with 2 spaces, some with 4 spaced tabs. Please try to stick to tabs.
   If you're using an editor that supports `EditorConfig <http://EditorConfig.org>`_\ , the editor should automatically use the settings defined in Bash-it's `.editorconfig file <.editorconfig>`_.
 * Prefer to invoke commands directly using the ``command`` shell builtin. This way, your code

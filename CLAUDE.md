@@ -47,14 +47,9 @@ git submodule init && git submodule update
 
 ### Linting and Code Quality
 
-The project uses a gradual pre-commit system implementation via `clean_files.txt` allow-list:
-
 ```bash
-# Run pre-commit hooks only on allow-listed clean files
+# Run all pre-commit hooks on the whole repository (vendor excluded)
 ./lint_clean_files.sh
-
-# Run pre-commit hooks on all files (for testing new coverage)
-pre-commit run --all-files
 
 # Manual shellcheck on bash files
 shellcheck **/*.bash
@@ -63,17 +58,11 @@ shellcheck **/*.bash
 shfmt -w **/*.bash
 ```
 
-**Gradual Linting System**:
-- `clean_files.txt`: Allow-list of files/directories that pass all linting rules
-- `lint_clean_files.sh`: Runs pre-commit hooks only on allow-listed files
-- When modifying files NOT in `clean_files.txt`, ensure they pass linting before adding them to the allow-list
-- Before creating a PR, add newly cleaned files to `clean_files.txt` to expand coverage
-- This system allows gradual improvement of code quality across the large codebase
+- `./lint_clean_files.sh` runs all pre-commit hooks on the whole repository (vendor excluded).
 
 **Vendor Directory Policy**:
 - Files in `vendor/` are treated as immutable external dependencies
 - Pre-commit hooks exclude vendor files via `.pre-commit-config.yaml` global exclude pattern
-- `clean_files.txt` does not include vendor shell scripts, only `.gitattributes`
 - CI and local linting will skip vendor files entirely
 
 ### Component Management

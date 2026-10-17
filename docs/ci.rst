@@ -51,7 +51,8 @@ This job runs several linting tools to ensure code quality:
 * `pre-commit <https://pre-commit.com/>`_: Runs all configured hooks in ``.pre-commit-config.yaml``.
 
 It runs on ``ubuntu-latest`` and uses Go and Python 3.12 to install the necessary tools.
-The linting is performed using the ``./lint_clean_files.sh`` script, which checks files listed in ``clean_files.txt``.
+CI runs the hooks via ``prek`` on the files a pull request changes.
+Run ``./lint_clean_files.sh`` to run them on all files locally.
 
 Lint Differential
 ^^^^^^^^^^^^^^^^^

@@ -14,22 +14,22 @@ function local_setup_file() {
 }
 
 @test "bash-it: load aliases in order" {
-	run ln -s "${BASH_IT?}/plugins/available/base.plugin.bash" "${BASH_IT?}/plugins/enabled/250---base.plugin.bash"
-	assert_link_exist "${BASH_IT?}/plugins/enabled/250---base.plugin.bash"
+	run ln -s "${BASH_IT?}/plugins/available/base.plugin.bash" "${BASH_IT?}/enabled/250---base.plugin.bash"
+	assert_link_exist "${BASH_IT?}/enabled/250---base.plugin.bash"
 
-	run ln -s "${BASH_IT?}/aliases/available/a.aliases.bash" "${BASH_IT?}/aliases/enabled/150---a.aliases.bash"
-	assert_link_exist "${BASH_IT?}/aliases/enabled/150---a.aliases.bash"
-	run ln -s "${BASH_IT?}/aliases/available/b.aliases.bash" "${BASH_IT?}/aliases/enabled/150---b.aliases.bash"
-	assert_link_exist "${BASH_IT?}/aliases/enabled/150---b.aliases.bash"
+	run ln -s "${BASH_IT?}/aliases/available/a.aliases.bash" "${BASH_IT?}/enabled/150---a.aliases.bash"
+	assert_link_exist "${BASH_IT?}/enabled/150---a.aliases.bash"
+	run ln -s "${BASH_IT?}/aliases/available/b.aliases.bash" "${BASH_IT?}/enabled/150---b.aliases.bash"
+	assert_link_exist "${BASH_IT?}/enabled/150---b.aliases.bash"
 
 	# The `test_alias` alias should not exist
 	run alias test_alias &> /dev/null
 	assert_failure
 
-	run ln -s "$BASH_IT/aliases/available/a.aliases.bash" "$BASH_IT/aliases/enabled/750---a.aliases.bash"
-	assert_link_exist "$BASH_IT/aliases/enabled/750---a.aliases.bash"
-	run ln -s "$BASH_IT/aliases/available/b.aliases.bash" "$BASH_IT/aliases/enabled/750---b.aliases.bash"
-	assert_link_exist "$BASH_IT/aliases/enabled/750---b.aliases.bash"
+	run ln -s "$BASH_IT/aliases/available/a.aliases.bash" "$BASH_IT/enabled/750---a.aliases.bash"
+	assert_link_exist "$BASH_IT/enabled/750---a.aliases.bash"
+	run ln -s "$BASH_IT/aliases/available/b.aliases.bash" "$BASH_IT/enabled/750---b.aliases.bash"
+	assert_link_exist "$BASH_IT/enabled/750---b.aliases.bash"
 
 	load "${BASH_IT?}/bash_it.sh"
 
@@ -39,22 +39,22 @@ function local_setup_file() {
 }
 
 @test "bash-it: load aliases in priority order" {
-	run ln -s "${BASH_IT?}/plugins/available/base.plugin.bash" "${BASH_IT?}/plugins/enabled/250---base.plugin.bash"
-	assert_link_exist "${BASH_IT?}/plugins/enabled/250---base.plugin.bash"
+	run ln -s "${BASH_IT?}/plugins/available/base.plugin.bash" "${BASH_IT?}/enabled/250---base.plugin.bash"
+	assert_link_exist "${BASH_IT?}/enabled/250---base.plugin.bash"
 
-	run ln -s "${BASH_IT?}/aliases/available/a.aliases.bash" "${BASH_IT?}/aliases/enabled/175---a.aliases.bash"
-	assert_link_exist "${BASH_IT?}/aliases/enabled/175---a.aliases.bash"
-	run ln -s "${BASH_IT?}/aliases/available/b.aliases.bash" "${BASH_IT?}/aliases/enabled/150---b.aliases.bash"
-	assert_link_exist "${BASH_IT?}/aliases/enabled/150---b.aliases.bash"
+	run ln -s "${BASH_IT?}/aliases/available/a.aliases.bash" "${BASH_IT?}/enabled/175---a.aliases.bash"
+	assert_link_exist "${BASH_IT?}/enabled/175---a.aliases.bash"
+	run ln -s "${BASH_IT?}/aliases/available/b.aliases.bash" "${BASH_IT?}/enabled/150---b.aliases.bash"
+	assert_link_exist "${BASH_IT?}/enabled/150---b.aliases.bash"
 
 	# The `test_alias` alias should not exist
 	run alias test_alias &> /dev/null
 	assert_failure
 
-	run ln -s "$BASH_IT/aliases/available/a.aliases.bash" "$BASH_IT/aliases/enabled/755---a.aliases.bash"
-	assert_link_exist "$BASH_IT/aliases/enabled/755---a.aliases.bash"
-	run ln -s "$BASH_IT/aliases/available/b.aliases.bash" "$BASH_IT/aliases/enabled/750---b.aliases.bash"
-	assert_link_exist "$BASH_IT/aliases/enabled/750---b.aliases.bash"
+	run ln -s "$BASH_IT/aliases/available/a.aliases.bash" "$BASH_IT/enabled/755---a.aliases.bash"
+	assert_link_exist "$BASH_IT/enabled/755---a.aliases.bash"
+	run ln -s "$BASH_IT/aliases/available/b.aliases.bash" "$BASH_IT/enabled/750---b.aliases.bash"
+	assert_link_exist "$BASH_IT/enabled/750---b.aliases.bash"
 
 	load "${BASH_IT?}/bash_it.sh"
 
@@ -63,117 +63,43 @@ function local_setup_file() {
 	assert_line -n 0 "alias test_alias='a'"
 }
 
-@test "bash-it: load aliases and plugins in priority order" {
-	run ln -s "${BASH_IT?}/plugins/available/base.plugin.bash" "${BASH_IT?}/plugins/enabled/250---base.plugin.bash"
-	assert_link_exist "${BASH_IT?}/plugins/enabled/250---base.plugin.bash"
-
+@test "bash-it: legacy per-type enabled directories are ignored with a migrate warning" {
 	run ln -s "${BASH_IT?}/aliases/available/a.aliases.bash" "${BASH_IT?}/aliases/enabled/150---a.aliases.bash"
 	assert_link_exist "${BASH_IT?}/aliases/enabled/150---a.aliases.bash"
-	run ln -s "${BASH_IT?}/aliases/available/b.aliases.bash" "${BASH_IT?}/aliases/enabled/150---b.aliases.bash"
-	assert_link_exist "${BASH_IT?}/aliases/enabled/150---b.aliases.bash"
-	run ln -s "${BASH_IT?}/plugins/available/c.plugin.bash" "${BASH_IT?}/plugins/enabled/250---c.plugin.bash"
-	assert_link_exist "${BASH_IT?}/plugins/enabled/250---c.plugin.bash"
 
-	# The `test_alias` alias should not exist
-	run alias test_alias &> /dev/null
-	assert_failure
-
-	run ln -s "$BASH_IT/aliases/available/a.aliases.bash" "$BASH_IT/aliases/enabled/750---a.aliases.bash"
-	assert_link_exist "$BASH_IT/aliases/enabled/750---a.aliases.bash"
-	run ln -s "$BASH_IT/aliases/available/b.aliases.bash" "$BASH_IT/aliases/enabled/750---b.aliases.bash"
-	assert_link_exist "$BASH_IT/aliases/enabled/750---b.aliases.bash"
-	run ln -s "$BASH_IT/plugins/available/c.plugin.bash" "$BASH_IT/plugins/enabled/250---c.plugin.bash"
-	assert_link_exist "$BASH_IT/plugins/enabled/250---c.plugin.bash"
-
-	load "${BASH_IT?}/bash_it.sh"
-
-	run alias test_alias &> /dev/null
+	run bash -c 'source "${BASH_IT}/bash_it.sh" && { alias test_alias || true; }' 2>&1
 	assert_success
-	assert_line -n 0 "alias test_alias='c'"
+	assert_output --partial "bash-it migrate"
+	refute_output --partial "alias test_alias="
 }
 
-@test "bash-it: load aliases, plugins and completions in priority order" {
-	run ln -s "${BASH_IT?}/plugins/available/base.plugin.bash" "${BASH_IT?}/plugins/enabled/250---base.plugin.bash"
-	assert_link_exist "${BASH_IT?}/plugins/enabled/250---base.plugin.bash"
-
-	run ln -s "${BASH_IT?}/aliases/available/a.aliases.bash" "${BASH_IT?}/aliases/enabled/150---a.aliases.bash"
-	assert_link_exist "${BASH_IT?}/aliases/enabled/150---a.aliases.bash"
-	run ln -s "${BASH_IT?}/aliases/available/b.aliases.bash" "${BASH_IT?}/completion/enabled/350---b.completion.bash"
-	assert_link_exist "${BASH_IT?}/completion/enabled/350---b.completion.bash"
-	run ln -s "${BASH_IT?}/plugins/available/c.plugin.bash" "${BASH_IT?}/plugins/enabled/250---c.plugin.bash"
-	assert_link_exist "${BASH_IT?}/plugins/enabled/250---c.plugin.bash"
-
-	# The `test_alias` alias should not exist
-	run alias test_alias &> /dev/null
-	assert_failure
-
-	run ln -s "$BASH_IT/aliases/available/a.aliases.bash" "$BASH_IT/aliases/enabled/750---a.aliases.bash"
-	assert_link_exist "$BASH_IT/aliases/enabled/750---a.aliases.bash"
-	run ln -s "$BASH_IT/aliases/available/b.aliases.bash" "$BASH_IT/completion/enabled/350---b.completion.bash"
-	assert_link_exist "$BASH_IT/completion/enabled/350---b.completion.bash"
-	run ln -s "$BASH_IT/plugins/available/c.plugin.bash" "$BASH_IT/plugins/enabled/250---c.plugin.bash"
-	assert_link_exist "$BASH_IT/plugins/enabled/250---c.plugin.bash"
-
-	load "${BASH_IT?}/bash_it.sh"
-
-	run alias test_alias &> /dev/null
+@test "bash-it: no migrate warning without legacy enabled directories" {
+	run bash -c 'source "${BASH_IT}/bash_it.sh"' 2>&1
 	assert_success
-	# "b" wins since completions are loaded last in the old directory structure
-	assert_line -n 0 "alias test_alias='b'"
+	refute_output --partial "bash-it migrate"
 }
 
-@test "bash-it: load aliases, plugins and completions in priority order, even if the priority says otherwise" {
-	run ln -s "${BASH_IT?}/plugins/available/base.plugin.bash" "${BASH_IT?}/plugins/enabled/250---base.plugin.bash"
-	assert_link_exist "${BASH_IT?}/plugins/enabled/250---base.plugin.bash"
-
-	run ln -s "${BASH_IT?}/aliases/available/a.aliases.bash" "${BASH_IT?}/aliases/enabled/450---a.aliases.bash"
-	assert_link_exist "${BASH_IT?}/aliases/enabled/450---a.aliases.bash"
-	run ln -s "${BASH_IT?}/aliases/available/b.aliases.bash" "${BASH_IT?}/completion/enabled/350---b.completion.bash"
-	assert_link_exist "${BASH_IT?}/completion/enabled/350---b.completion.bash"
-	run ln -s "${BASH_IT?}/plugins/available/c.plugin.bash" "${BASH_IT?}/plugins/enabled/950---c.plugin.bash"
-	assert_link_exist "${BASH_IT?}/plugins/enabled/950---c.plugin.bash"
-
-	# The `test_alias` alias should not exist
-	run alias test_alias &> /dev/null
-	assert_failure
-
-	load "${BASH_IT?}/bash_it.sh"
-
-	run alias test_alias &> /dev/null
+@test "bash-it: reloader works under set -u without arguments" {
+	run bash -c 'source "${BASH_IT}/bash_it.sh"; set -u; source "${BASH_IT}/scripts/reloader.bash"' 2>&1
 	assert_success
-	# "b" wins since completions are loaded last in the old directory structure
-	assert_line -n 0 "alias test_alias='b'"
 }
 
-@test "bash-it: load aliases and plugins in priority order, with one alias higher than plugins" {
-	run ln -s "${BASH_IT?}/plugins/available/base.plugin.bash" "${BASH_IT?}/plugins/enabled/250---base.plugin.bash"
-	assert_link_exist "${BASH_IT?}/plugins/enabled/250---base.plugin.bash"
+@test "bash-it: reloader with 'alias' loads only aliases from the global enabled directory" {
+	run ln -s "${BASH_IT?}/aliases/available/a.aliases.bash" "${BASH_IT?}/enabled/950---a.aliases.bash"
+	run ln -s "${BASH_IT?}/plugins/available/c.plugin.bash" "${BASH_IT?}/enabled/850---c.plugin.bash"
 
-	run ln -s "${BASH_IT?}/aliases/available/a.aliases.bash" "${BASH_IT?}/aliases/enabled/350---a.aliases.bash"
-	assert_link_exist "${BASH_IT?}/aliases/enabled/350---a.aliases.bash"
-	run ln -s "${BASH_IT?}/aliases/available/b.aliases.bash" "${BASH_IT?}/aliases/enabled/150---b.aliases.bash"
-	assert_link_exist "${BASH_IT?}/aliases/enabled/150---b.aliases.bash"
-	run ln -s "${BASH_IT?}/plugins/available/c.plugin.bash" "${BASH_IT?}/plugins/enabled/250---c.plugin.bash"
-	assert_link_exist "${BASH_IT?}/plugins/enabled/250---c.plugin.bash"
-
-	# The `test_alias` alias should not exist
-	run alias test_alias &> /dev/null
-	assert_failure
-
-	run ln -s "$BASH_IT/aliases/available/a.aliases.bash" "$BASH_IT/aliases/enabled/350---a.aliases.bash"
-	assert_link_exist "$BASH_IT/aliases/enabled/350---a.aliases.bash"
-	run ln -s "$BASH_IT/aliases/available/b.aliases.bash" "$BASH_IT/aliases/enabled/750---b.aliases.bash"
-	assert_link_exist "$BASH_IT/aliases/enabled/750---b.aliases.bash"
-	run ln -s "$BASH_IT/plugins/available/c.plugin.bash" "$BASH_IT/plugins/enabled/250---c.plugin.bash"
-	assert_link_exist "$BASH_IT/plugins/enabled/250---c.plugin.bash"
-
-	load "${BASH_IT?}/bash_it.sh"
-
-	run alias test_alias &> /dev/null
+	run bash -c 'source "${BASH_IT}/bash_it.sh"; unalias test_alias; source "${BASH_IT}/scripts/reloader.bash" alias; alias test_alias'
 	assert_success
-	# This will be c, loaded from the c plugin, since the individual directories
-	# are loaded one by one.
-	assert_line -n 0 "alias test_alias='c'"
+	assert_output "alias test_alias='a'"
+}
+
+@test "bash-it: reloader with 'plugin' loads only plugins from the global enabled directory" {
+	run ln -s "${BASH_IT?}/aliases/available/a.aliases.bash" "${BASH_IT?}/enabled/950---a.aliases.bash"
+	run ln -s "${BASH_IT?}/plugins/available/c.plugin.bash" "${BASH_IT?}/enabled/850---c.plugin.bash"
+
+	run bash -c 'source "${BASH_IT}/bash_it.sh"; unalias test_alias; source "${BASH_IT}/scripts/reloader.bash" plugin; alias test_alias'
+	assert_success
+	assert_output "alias test_alias='c'"
 }
 
 @test "bash-it: load global aliases in order" {
@@ -286,43 +212,6 @@ function local_setup_file() {
 	assert_line -n 0 "alias test_alias='a'"
 }
 
-@test "bash-it: load global aliases and plugins in priority order, individual old directories are loaded later" {
-	run ln -s "${BASH_IT?}/plugins/available/base.plugin.bash" "${BASH_IT?}/enabled/250---base.plugin.bash"
-	assert_link_exist "${BASH_IT?}/enabled/250---base.plugin.bash"
-
-	run ln -s "${BASH_IT?}/aliases/available/a.aliases.bash" "${BASH_IT?}/enabled/350---a.aliases.bash"
-	assert_link_exist "${BASH_IT?}/enabled/350---a.aliases.bash"
-	run ln -s "${BASH_IT?}/aliases/available/b.aliases.bash" "${BASH_IT?}/enabled/150---b.aliases.bash"
-	assert_link_exist "${BASH_IT?}/enabled/150---b.aliases.bash"
-	run ln -s "${BASH_IT?}/plugins/available/c.plugin.bash" "${BASH_IT?}/enabled/250---c.plugin.bash"
-	assert_link_exist "${BASH_IT?}/enabled/250---c.plugin.bash"
-	# Add one file in the old directory structure
-	run ln -s "${BASH_IT?}/aliases/available/b.aliases.bash" "${BASH_IT?}/aliases/enabled/150---b.aliases.bash"
-	assert_link_exist "${BASH_IT?}/aliases/enabled/150---b.aliases.bash"
-
-	# The `test_alias` alias should not exist
-	run alias test_alias &> /dev/null
-	assert_failure
-
-	run ln -s "$BASH_IT/aliases/available/a.aliases.bash" "$BASH_IT/enabled/350---a.aliases.bash"
-	assert_link_exist "$BASH_IT/enabled/350---a.aliases.bash"
-	run ln -s "$BASH_IT/aliases/available/b.aliases.bash" "$BASH_IT/enabled/750---b.aliases.bash"
-	assert_link_exist "$BASH_IT/enabled/750---b.aliases.bash"
-	run ln -s "$BASH_IT/plugins/available/c.plugin.bash" "$BASH_IT/enabled/250---c.aplugin.bash"
-	assert_link_exist "$BASH_IT/enabled/250---c.plugin.bash"
-	# Add one file in the old directory structure
-	run ln -s "$BASH_IT/aliases/available/b.aliases.bash" "$BASH_IT/aliases/enabled/750---b.aliases.bash"
-	assert_link_exist "$BASH_IT/aliases/enabled/750---b.aliases.bash"
-
-	load "${BASH_IT?}/bash_it.sh"
-
-	run alias test_alias &> /dev/null
-	assert_success
-	# This will be "b", loaded from the b aliases in the individual directory, since
-	# the individual directories are loaded after the global one.
-	assert_line -n 0 "alias test_alias='b'"
-}
-
 @test "bash-it: load enabled aliases from new structure, priority-based" {
 	run ln -s "${BASH_IT?}/aliases/available/atom.aliases.bash" "${BASH_IT?}/enabled/150---atom.aliases.bash"
 	assert_link_exist "${BASH_IT?}/enabled/150---atom.aliases.bash"
@@ -345,34 +234,16 @@ function local_setup_file() {
 	assert_success
 }
 
-@test "bash-it: load enabled aliases from old structure, priority-based" {
-	run ln -s "${BASH_IT?}/aliases/available/atom.aliases.bash" "${BASH_IT?}/aliases/enabled/150---atom.aliases.bash"
-	assert_link_exist "${BASH_IT?}/aliases/enabled/150---atom.aliases.bash"
-	run ln -s "${BASH_IT?}/plugins/available/base.plugin.bash" "${BASH_IT?}/plugins/enabled/250---base.plugin.bash"
-	assert_link_exist "${BASH_IT?}/plugins/enabled/250---base.plugin.bash"
+@test "bash-it: load enabled aliases from global structure, priority-based" {
+	run ln -s "${BASH_IT?}/aliases/available/atom.aliases.bash" "${BASH_IT?}/enabled/150---atom.aliases.bash"
+	assert_link_exist "${BASH_IT?}/enabled/150---atom.aliases.bash"
+	run ln -s "${BASH_IT?}/plugins/available/base.plugin.bash" "${BASH_IT?}/enabled/250---base.plugin.bash"
+	assert_link_exist "${BASH_IT?}/enabled/250---base.plugin.bash"
 
-	mkdir -p "$BASH_IT/aliases/enabled"
-	mkdir -p "$BASH_IT/plugins/enabled"
-	run ln -s "$BASH_IT/aliases/available/atom.aliases.bash" "$BASH_IT/aliases/enabled/750---atom.aliases.bash"
-	assert_link_exist "$BASH_IT/aliases/enabled/750---atom.aliases.bash"
-	run ln -s "$BASH_IT/plugins/available/base.plugin.bash" "$BASH_IT/plugins/enabled/250---base.plugin.bash"
-	assert_link_exist "$BASH_IT/plugins/enabled/250---base.plugin.bash"
-
-	# The `ah` alias should not exist
-	run alias ah &> /dev/null
-	assert_failure
-
-	load "${BASH_IT?}/bash_it.sh"
-
-	run alias ah &> /dev/null
-	assert_success
-}
-
-@test "bash-it: load enabled aliases from old structure, without priorities" {
-	run ln -s "${BASH_IT?}/aliases/available/atom.aliases.bash" "${BASH_IT?}/aliases/enabled/atom.aliases.bash"
-	assert_link_exist "${BASH_IT?}/aliases/enabled/atom.aliases.bash"
-	run ln -s "${BASH_IT?}/plugins/available/base.plugin.bash" "${BASH_IT?}/plugins/enabled/base.plugin.bash"
-	assert_link_exist "${BASH_IT?}/plugins/enabled/base.plugin.bash"
+	run ln -s "$BASH_IT/aliases/available/atom.aliases.bash" "$BASH_IT/enabled/750---atom.aliases.bash"
+	assert_link_exist "$BASH_IT/enabled/750---atom.aliases.bash"
+	run ln -s "$BASH_IT/plugins/available/base.plugin.bash" "$BASH_IT/enabled/250---base.plugin.bash"
+	assert_link_exist "$BASH_IT/enabled/250---base.plugin.bash"
 
 	# The `ah` alias should not exist
 	run alias ah &> /dev/null

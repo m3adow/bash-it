@@ -39,20 +39,20 @@ function _bash_it_homebrew_check() {
 }
 
 function _make_reload_alias() {
-	echo "source '${BASH_IT?}/scripts/reloader.bash' '${1?}' '${2?}'"
+	echo "source '${BASH_IT?}/scripts/reloader.bash' '${1?}'"
 }
 
 # Alias for reloading aliases
 # shellcheck disable=SC2139
-alias reload_aliases="$(_make_reload_alias alias aliases)"
+alias reload_aliases="$(_make_reload_alias alias)"
 
 # Alias for reloading auto-completion
 # shellcheck disable=SC2139
-alias reload_completion="$(_make_reload_alias completion completion)"
+alias reload_completion="$(_make_reload_alias completion)"
 
 # Alias for reloading plugins
 # shellcheck disable=SC2139
-alias reload_plugins="$(_make_reload_alias plugin plugins)"
+alias reload_plugins="$(_make_reload_alias plugin)"
 
 function bash-it() {
 	about 'Bash-it help and maintenance'
@@ -309,12 +309,27 @@ function _bash-it-migrate() {
 	_about 'migrates Bash-it configuration from a previous format to the current one'
 	_group 'lib'
 
-	local migrated_something component_type component_name single_type file_type _bash_it_config_file disable_func enable_func
+	local migrated_something component_type component_name single_type file_type _bash_it_config_file disable_func enable_func legacy_base global_link
 	migrated_something=false
 
 	for file_type in "aliases" "plugins" "completion"; do
 		for _bash_it_config_file in "${BASH_IT}/$file_type/enabled"/*.bash; do
+			if [[ -L "$_bash_it_config_file" && ! -e "$_bash_it_config_file" ]]; then
+				echo "Removing dangling link ${_bash_it_config_file##*/}."
+				command rm -f "$_bash_it_config_file"
+				continue
+			fi
 			[[ -f "$_bash_it_config_file" ]] || continue
+
+			legacy_base="${_bash_it_config_file##*/}"
+			legacy_base="${legacy_base#[[:digit:]][[:digit:]][[:digit:]]"${BASH_IT_LOAD_PRIORITY_SEPARATOR?}"}"
+			for global_link in "${BASH_IT}/enabled"/[[:digit:]][[:digit:]][[:digit:]]"${BASH_IT_LOAD_PRIORITY_SEPARATOR}${legacy_base}"; do
+				if [[ -e "$global_link" ]]; then
+					echo "Removing legacy ${_bash_it_config_file##*/}; already enabled."
+					command rm -f "$_bash_it_config_file"
+					continue 2
+				fi
+			done
 
 			# Get the type of component from the extension
 			component_type="$(_bash-it-get-component-type-from-path "$_bash_it_config_file")"
@@ -1163,7 +1178,7 @@ function _help-aliases() {
 	else
 		local f
 
-		for f in "${BASH_IT}/aliases/enabled"/* "${BASH_IT}/enabled"/*."aliases.bash"; do
+		for f in "${BASH_IT}/enabled"/*."aliases.bash"; do
 			[[ -f "$f" ]] || continue
 			_help-list-aliases "$f"
 		done

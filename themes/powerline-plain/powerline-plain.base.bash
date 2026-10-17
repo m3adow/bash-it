@@ -39,8 +39,6 @@ function __powerline_prompt_command {
 	LAST_SEGMENT_COLOR=""
 	PROMPT_AFTER="${POWERLINE_PROMPT_AFTER}"
 
-	_save-and-reload-history "${HISTORY_AUTOSAVE:-0}"
-
 	## left prompt ##
 	for segment in $POWERLINE_PROMPT; do
 		local info

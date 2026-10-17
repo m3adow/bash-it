@@ -11,8 +11,6 @@ function local_setup_file() {
 # Stub a no-op segment so we can run __powerline_prompt_command without
 # sourcing every plugin that the default segments depend on.
 function __powerline_noop_prompt() { :; }
-# _save-and-reload-history is called unconditionally; stub it out.
-function _save-and-reload-history() { :; }
 
 # --- __powerline_prompt_command: missing-newline handler (fixes #2372) ---
 

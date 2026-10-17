@@ -31,8 +31,6 @@ function __powerline_left_segment {
 	#seperator char color == current bg
 	LAST_SEGMENT_COLOR="${params[1]:-}"
 	((SEGMENTS_AT_LEFT += 1))
-
-	_save-and-reload-history "${HISTORY_AUTOSAVE:-0}"
 }
 
 function __powerline_left_last_segment_padding {

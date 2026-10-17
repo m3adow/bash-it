@@ -84,3 +84,21 @@ function assert_history_calls() {
 	set +u
 	assert_history_calls ''
 }
+
+@test "lib history: HISTORY_AUTOSAVE=1 implies autoshare" {
+	HISTCONTROL='ignoreboth'
+	HISTORY_AUTOSAVE=1
+	_bash-it-history-auto-save
+	_bash-it-history-auto-load
+	unset HISTORY_AUTOSAVE
+	assert_history_calls $'history -a\nhistory -a\nhistory -c\nhistory -r'
+}
+
+@test "lib history: noauto still wins over HISTORY_AUTOSAVE=1" {
+	HISTCONTROL='noauto'
+	HISTORY_AUTOSAVE=1
+	_bash-it-history-auto-save
+	_bash-it-history-auto-load
+	unset HISTORY_AUTOSAVE
+	assert_history_calls ''
+}

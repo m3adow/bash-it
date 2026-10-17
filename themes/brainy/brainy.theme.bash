@@ -210,14 +210,12 @@ _brainy_completion() {
 	segments="battery clock exitcode python ruby scm sudo todo"
 	case "${_action}" in
 		show | hide)
-			# shellcheck disable=SC2207
-			COMPREPLY=($(compgen -W "${segments}" -- "${cur}"))
+			_bash-it-compgen -W "${segments}" -- "${cur}"
 			return 0
 			;;
 	esac
 
-	# shellcheck disable=SC2207
-	COMPREPLY=($(compgen -W "${actions}" -- "${cur}"))
+	_bash-it-compgen -W "${actions}" -- "${cur}"
 	return 0
 }
 

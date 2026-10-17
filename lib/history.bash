@@ -8,7 +8,9 @@ function _bash-it-history-init() {
 }
 
 function _bash-it-history-auto-save() {
-	case ":${HISTCONTROL-}:" in
+	local control=":${HISTCONTROL-}:"
+	[[ "${HISTORY_AUTOSAVE:-0}" == 1 ]] && control+="autoshare:"
+	case "${control}" in
 		*:noauto:* | *:autoload:* | *:autoloadnew:*)
 			: # Do nothing, as configured.
 			;;
@@ -24,7 +26,9 @@ function _bash-it-history-auto-save() {
 }
 
 function _bash-it-history-auto-load() {
-	case ":${HISTCONTROL-}:" in
+	local control=":${HISTCONTROL-}:"
+	[[ "${HISTORY_AUTOSAVE:-0}" == 1 ]] && control+="autoshare:"
+	case "${control}" in
 		*:noauto:*)
 			: # Do nothing, as configured.
 			;;

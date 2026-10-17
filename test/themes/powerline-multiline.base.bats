@@ -9,7 +9,6 @@ function local_setup_file() {
 }
 
 function __powerline_noop_prompt() { :; }
-function _save-and-reload-history() { :; }
 
 @test "powerline-multiline: prints the missing-newline handler first" {
 	COLUMNS=20

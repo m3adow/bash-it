@@ -67,8 +67,6 @@ function __powerline_prompt_command() {
 	local SEGMENTS_AT_RIGHT=0
 	local LAST_SEGMENT_COLOR=""
 
-	_save-and-reload-history "${HISTORY_AUTOSAVE:-0}"
-
 	if [[ -n "${POWERLINE_PROMPT_DISTRO_LOGO:-}" ]]; then
 		LEFT_PROMPT+="$(set_color "${PROMPT_DISTRO_LOGO_COLOR?}" "${PROMPT_DISTRO_LOGO_COLORBG?}")${PROMPT_DISTRO_LOGO?}$(set_color - -)"
 	fi

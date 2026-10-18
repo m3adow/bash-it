@@ -8,11 +8,13 @@ function _bash-it-history-init() {
 }
 
 function _bash-it-history-auto-save() {
-	case $HISTCONTROL in
-		*'noauto'* | *'autoload'*)
+	local control=":${HISTCONTROL-}:"
+	[[ "${HISTORY_AUTOSAVE:-0}" == 1 ]] && control+="autoshare:"
+	case "${control}" in
+		*:noauto:* | *:autoload:* | *:autoloadnew:*)
 			: # Do nothing, as configured.
 			;;
-		*'auto'*)
+		*:autosave:* | *:autoshare:*)
 			# Append new history from this session to the $HISTFILE
 			history -a
 			;;
@@ -24,19 +26,21 @@ function _bash-it-history-auto-save() {
 }
 
 function _bash-it-history-auto-load() {
-	case $HISTCONTROL in
-		*'noauto'*)
+	local control=":${HISTCONTROL-}:"
+	[[ "${HISTORY_AUTOSAVE:-0}" == 1 ]] && control+="autoshare:"
+	case "${control}" in
+		*:noauto:*)
 			: # Do nothing, as configured.
 			;;
-		*'autosave'*)
+		*:autosave:*)
 			# Append new history from this session to the $HISTFILE
 			history -a
 			;;
-		*'autoloadnew'*)
+		*:autoloadnew:*)
 			# Read new entries from $HISTFILE
 			history -n
 			;;
-		*'auto'*)
+		*:autoload:* | *:autoshare:*)
 			# Blank in-memory history, then read entire $HISTFILE fresh from disk.
 			history -a && history -c && history -r
 			;;

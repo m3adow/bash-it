@@ -1,14 +1,14 @@
 # shellcheck shell=bash
 # shellcheck disable=SC2034 # Expected behavior for themes.
 
+: "${HISTORY_AUTOSAVE:=1}"
+
 # based off of n0qorg
 # looks like, if you're in a git repo:
 # ± ~/path/to (branch ✓) $
 # in glorious red / blue / yellow color scheme
 
 prompt_setter() {
-	# Save history
-	_save-and-reload-history 1
 	# displays user@server in purple
 	# PS1="${red?}$(scm_char) ${purple?}\u@\h${reset_color?}:${blue?}\w${yellow?}$(scm_prompt_info)$(ruby_version_prompt) ${black?}\$${reset_color?} "
 	# no user@server

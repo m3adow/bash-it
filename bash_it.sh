@@ -44,14 +44,15 @@ for _bash_it_main_file_lib in "${BASH_IT}/lib"/*.bash; do
 	BASH_IT_LOG_PREFIX="core: main: "
 done
 
-# Load the global "enabled" directory, then enabled aliases, completion, plugins
-# "_bash_it_main_file_type" param is empty so that files get sourced in glob order
-for _bash_it_main_file_type in "" "aliases" "plugins" "completion"; do
-	BASH_IT_LOG_PREFIX="core: reloader: "
-	# shellcheck disable=SC2140
-	source "${BASH_IT}/scripts/reloader.bash" ${_bash_it_main_file_type:+"skip" "$_bash_it_main_file_type"}
-	BASH_IT_LOG_PREFIX="core: main: "
+for _bash_it_main_file_type in "aliases" "plugins" "completion"; do
+	if compgen -G "${BASH_IT}/${_bash_it_main_file_type}/enabled/*.bash" > /dev/null; then
+		printf '%s\n' "Bash-it: ignoring legacy ${_bash_it_main_file_type}/enabled/; run 'bash-it migrate'." >&2
+	fi
 done
+BASH_IT_LOG_PREFIX="core: reloader: "
+# Load the global "enabled" directory
+source "${BASH_IT}/scripts/reloader.bash"
+BASH_IT_LOG_PREFIX="core: main: "
 
 # Load theme, if a theme was set
 # shellcheck source-path=SCRIPTDIR/themes

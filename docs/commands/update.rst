@@ -35,4 +35,5 @@ For these cases, we provide a ``migrate`` command:
    bash-it migrate
 
 This command will automatically migrate the Bash-it structure to the latest version.
+The legacy per-type ``aliases/enabled``, ``plugins/enabled`` and ``completion/enabled`` directories are no longer loaded; run ``bash-it migrate`` to move their components to the global ``enabled`` directory.
 The ``migrate`` command is run automatically if you run the ``update``\ , ``enable`` or ``disable`` commands.

@@ -26,5 +26,5 @@
 - [ ] My code follows the code style of this project.
 - [ ] If my change requires a change to the documentation, I have updated the documentation accordingly.
 - [ ] I have read the **CONTRIBUTING** document.
-- [ ] If I have added a new file, I also added it to ``clean_files.txt`` and formatted it using ``lint_clean_files.sh``.
+- [ ] I ran ``./lint_clean_files.sh`` and it passes.
 - [ ] I have added tests to cover my changes, and all the new and existing tests pass.

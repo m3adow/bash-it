@@ -12,32 +12,25 @@ __ngrok_completion() {
 
 	case $prev in
 		authtoken)
-			# shellcheck disable=SC2207
-			COMPREPLY=($(compgen -W "$BASE" -- "$curr"))
+			_bash-it-compgen -W "$BASE" -- "$curr"
 			;;
 		http)
-			# shellcheck disable=SC2207
-			COMPREPLY=($(compgen -W "$DEFAULT --auth --bind-tls --host-header --hostname --inspect --subdomain" -- "$curr"))
+			_bash-it-compgen -W "$DEFAULT --auth --bind-tls --host-header --hostname --inspect --subdomain" -- "$curr"
 			;;
 		start)
-			# shellcheck disable=SC2207
-			COMPREPLY=($(compgen -W "$DEFAULT --all --none" -- "$curr"))
+			_bash-it-compgen -W "$DEFAULT --all --none" -- "$curr"
 			;;
 		tcp)
-			# shellcheck disable=SC2207
-			COMPREPLY=($(compgen -W "$DEFAULT --remote-addr" -- "$curr"))
+			_bash-it-compgen -W "$DEFAULT --remote-addr" -- "$curr"
 			;;
 		tls)
-			# shellcheck disable=SC2207
-			COMPREPLY=($(compgen -W "$DEFAULT --client-cas --crt --hostname --key --subdomain" -- "$curr"))
+			_bash-it-compgen -W "$DEFAULT --client-cas --crt --hostname --key --subdomain" -- "$curr"
 			;;
 		update)
-			# shellcheck disable=SC2207
-			COMPREPLY=($(compgen -W "$BASE_NO_CONF --channel" -- "$curr"))
+			_bash-it-compgen -W "$BASE_NO_CONF --channel" -- "$curr"
 			;;
 		ngrok)
-			# shellcheck disable=SC2207
-			COMPREPLY=($(compgen -W "authtoken credits http start tcp tls update version help" -- "$curr"))
+			_bash-it-compgen -W "authtoken credits http start tcp tls update version help" -- "$curr"
 			;;
 		*) ;;
 

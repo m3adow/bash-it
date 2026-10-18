@@ -109,8 +109,7 @@ function __composer_completion() {
 
 		esac
 
-		# shellcheck disable=SC2207
-		COMPREPLY=($(compgen -W "${opts}" -- "${cur}"))
+		_bash-it-compgen -W "${opts}" -- "${cur}"
 		__ltrim_colon_completions "${cur}"
 
 		return 0
@@ -120,8 +119,7 @@ function __composer_completion() {
 	if [[ "${cur}" == "${com}" ]]; then
 		coms="about archive browse clear-cache config create-project depends diagnose dump-autoload exec global help init install licenses list outdated prohibits remove require run-script search self-update show status suggests update validate"
 
-		# shellcheck disable=SC2207
-		COMPREPLY=($(compgen -W "${coms}" -- "${cur}"))
+		_bash-it-compgen -W "${coms}" -- "${cur}"
 		__ltrim_colon_completions "${cur}"
 
 		return 0

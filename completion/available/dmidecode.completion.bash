@@ -11,12 +11,9 @@ function _dmidecode() {
 
 	case $prev in
 		-s | --string | -t | --type)
-			OPTS=$(dmidecode "$prev" 2>&1 | grep -E '^ ' | sed 's/ *//g')
-			# shellcheck disable=SC2207
-			COMPREPLY=("${OPTS[@]}")
+			_bash-it-array-from-lines COMPREPLY < <(dmidecode "$prev" 2>&1 | command grep -E '^ ' | command sed 's/ *//g')
 			;;
 		dmidecode)
-			# shellcheck disable=SC2207
 			COMPREPLY=("-d" "--dev-mem" "-h" "--help" "-q" "--quiet" "-s" "--string" "-t" "--type" "-H" "--handle" "-u" "--dump" "-dump-bin" "--from-dump" "--no-sysfs" "--oem-string" "-V" "--version")
 			;;
 	esac

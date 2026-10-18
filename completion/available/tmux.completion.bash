@@ -18,7 +18,7 @@ _tmux_expand() {
 	else
 		if [[ "$cur" == \~* ]]; then
 			cur=${cur#\~}
-			COMPREPLY=($(compgen -P '~' -u "$cur"))
+			_bash-it-compgen -P '~' -u "$cur"
 			return ${#COMPREPLY[@]}
 		fi
 	fi
